@@ -1,10 +1,20 @@
 /*
+
+Next step: figure out how to make a request to sqs without the aws sdk.
+The main work will be how to authorize
+A combo between the POST on this https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-making-api-requests.html
+and the post on this https://docs.aws.amazon.com/general/latest/gr/sigv4-signed-request-examples.html
+then this https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_GetQueueUrl.html
+
+
  *  Simple HTTP get webclient test'
  * This is taken from the sample on the ADAFRUIT website. Going to modify to work for me. 
  */
 
 #include <ESP8266WiFi.h>
+#include <sha256.h>
 #include "secret.h"
+
 
 const char* host = "wifitest.adafruit.com";
 
@@ -22,7 +32,7 @@ void setup() {
   WiFi.begin(ssid, password);
   
   while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
+    delay(200);
     Serial.print(".");
   }
 
@@ -35,6 +45,13 @@ void setup() {
 int value = 0;
 
 void loop() {
+  // this is how I will sign the request. 
+  // uint8_t *hash;
+  // Sha256.initHmac("hash key",8); // key, and length of key in bytes
+  // Sha256.print("This is a message to hash");
+  // hash = Sha256.resultHmac();
+
+
   delay(5000);
   ++value;
 
