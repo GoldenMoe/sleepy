@@ -1,15 +1,10 @@
 /*
-
-Next step: figure out how to make a request to sqs without the aws sdk.
-The main work will be how to authorize
-A combo between the POST on this https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-making-api-requests.html
-and the post on this https://docs.aws.amazon.com/general/latest/gr/sigv4-signed-request-examples.html
-then this https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_GetQueueUrl.html
-
-
- *  Simple HTTP get webclient test'
- * This is taken from the sample on the ADAFRUIT website. Going to modify to work for me. 
- */
+* Note: final step will be to implement long polling:
+* https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-long-polling.html
+*
+* Simple HTTP get webclient test
+* This is taken from the sample on the ADAFRUIT website. Going to modify to work for me. 
+*/
 
 #include <ESP8266WiFi.h>
 #include <sha256.h>
