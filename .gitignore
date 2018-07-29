@@ -1,2 +1,4 @@
 secret.h
 *.out
+.vscode
+bull.ino
