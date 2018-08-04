@@ -2,22 +2,14 @@
 The following code is a modified version of code from the AWS doc.
 See: https://docs.aws.amazon.com/general/latest/gr/sigv4-signed-request-examples.html#sig-v4-examples-post
 It is modified to manually make HTTP requests to SQS without the SDK.
-It sends a simple message to an existing queue.
+It receives a message from a queue on SQS.
 
 The reason I wrote it is so I can understand the process of manually
 authenticating against AWS, so I can do it in the Arduino code.  
-
-To use it, you will need to change account number, queue name variables.
-Set your access ID and AWS secret key as environment variables.
 """
 
 # NEED TO TRY THIS WITH SHA1 because I may not be able to use sha256 on the esp8266.
 
-
-
-# AWS Version 4 signing example
-# This version makes a GET request and passes request parameters
-# and authorization information in the query string
 import sys, os, base64, datetime, hashlib, hmac, urllib, requests
 
 # ************* REQUEST VALUES *************
@@ -52,20 +44,7 @@ t = datetime.datetime.utcnow()
 amz_date = t.strftime('%Y%m%dT%H%M%SZ') # Format date as YYYYMMDD'T'HHMMSS'Z'
 datestamp = t.strftime('%Y%m%d') # Date w/o time, used in credential scope
 
-
-# ************* TASK 1: CREATE A CANONICAL REQUEST *************
-# http://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html
-
-# Step 2: Create canonical URI--the part of the URI from domain to query 
-# string (use '/' if no path)
 canonical_uri = '/' 
-
-# Step 3: Create the canonical headers and signed headers. Header names
-# must be trimmed and lowercase, and sorted in code point order from
-# low to high. Note trailing \n in canonical_headers.
-# signed_headers is the list of headers that are being included
-# as part of the signing process. For requests that use query strings,
-# only "host" is included in the signed headers.
 canonical_headers = 'host:' + host + '\n'
 signed_headers = 'host'
 
@@ -73,10 +52,6 @@ signed_headers = 'host'
 # SHA-256 (recommended)
 algorithm = 'AWS4-HMAC-SHA256'
 credential_scope = datestamp + '/' + region + '/' + service + '/' + 'aws4_request'
-
-# Step 4: Create the canonical query string. In this example, request
-# parameters are in the query string. Query string values must
-# be URL-encoded.
 
 canonical_querystring = 'Action=ReceiveMessage'
 canonical_querystring += '&Version=2012-11-05'
@@ -86,11 +61,10 @@ canonical_querystring += '&X-Amz-Date=' + amz_date
 canonical_querystring += '&X-Amz-Expires=30'
 canonical_querystring += '&X-Amz-SignedHeaders=' + signed_headers
 
-# Step 5: Create payload hash. For GET requests, the payload is an
-# empty string ("").
+# For GET requests, the payload is an empty string ("").
 payload_hash = hashlib.sha256('').hexdigest()
 
-# Step 6: Combine elements to create canonical request
+# Combine elements to create canonical request
 canonical_request = method + '\n' + '/141291046059/sleepyQueue' + '\n' + canonical_querystring + '\n' + canonical_headers + '\n' + signed_headers + '\n' + payload_hash
 print("canonical_request:\n" + canonical_request)
 
@@ -106,15 +80,10 @@ signing_key = getSignatureKey(secret_key, datestamp, region, service)
 signature = hmac.new(signing_key, (string_to_sign).encode("utf-8"), hashlib.sha256).hexdigest()
 
 # ************* TASK 4: ADD SIGNING INFORMATION TO THE REQUEST *************
-# The auth information can be either in a query string
-# value or in a header named Authorization. This code shows how to put
-# everything into a query string.
 canonical_querystring += '&X-Amz-Signature=' + signature
 
-
 # ************* SEND THE REQUEST *************
-# The 'host' header is added automatically by the Python 'request' lib. But it
-# must exist as a header in the request.
+# The 'host' header is added automatically by the Python 'request' lib.
 request_url = endpoint + "?" + canonical_querystring
 
 print '\nBEGIN REQUEST++++++++++++++++++++++++++++++++++++'
