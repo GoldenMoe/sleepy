@@ -3,22 +3,26 @@
 
 // Libraries and Dependencies
 #include "secret.h"
+#include "Arduino.h"
 #include <ESP8266WiFi.h>
-#include <WiFiUdp.h>
 #include <TimeLib.h> 
-#include <sha256.h>
+#include <string.h>
 
 // GLOBALS
-const char* method = "GET";
-const char* service = "sqs";
-const char* region = "ap-southeast-2";
-const char* account_number = "141291046059";
-const char* queueName = "sleepyQueue";
 time_t t;
 const short int httpPort = 80;
 
+String account_number = "141291046059";
+String queueName = String("sleepyQueue");
+String service = String("sqs");
+
+String method = String("GET");
+String region = String("ap-southeast-2");
+String host = String("sqs." + region + ".amazonaws.com");
+String endpoint = String("https://" + host + "/" + account_number + "/" + queueName);
+
 // Function Definitions
 char* construct_aws_request(const char* key, const char* msg);
-int whats_the_time(void);
+time_t get_time_from_api(void);
 
 #endif

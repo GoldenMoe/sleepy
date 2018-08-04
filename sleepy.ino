@@ -21,16 +21,16 @@ https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Receiv
  */
 
 #include "sleepy.h"
+#include <ESP8266HTTPClient.h>
 
-void setup() {
+void setup() { 
+  extern String TIME_API_KEY;
   Serial.begin(115200);
   delay(100);
 
-  // We start by connecting to a WiFi network
-
-  Serial.println();
-  Serial.print("Connecting to ");
-  Serial.println(ssid);
+  // Connect to WiFi
+  Serial.print("\nConnecting to ");
+  Serial.print(ssid);
   
   WiFi.begin(ssid, password);
   
@@ -39,21 +39,13 @@ void setup() {
     Serial.print(".");
   }
 
-  // This function utilises NTP/UDP 
-  t = whats_the_time();
-  Serial.println("The time is: " + String(t))
+  t = get_time_from_api();
+  Serial.println("The time is: " + String(t));
 
 }
 
 
 void loop() {
-  // this is how I will sign the request. 
-  // uint8_t *hash;
-  // Sha256.initHmac("hash key",8); // key, and length of key in bytes
-  // Sha256.print("This is a message to hash");
-  // hash = Sha256.resultHmac();
-  const char* host = service + "." + region + ".amazonaws.com";
-  const char* endpoint = "https://" + host + "/" + account_number + "/" + queueName;
 
   delay(5000);
 

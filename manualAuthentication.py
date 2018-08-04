@@ -11,6 +11,10 @@ To use it, you will need to change account number, queue name variables.
 Set your access ID and AWS secret key as environment variables.
 """
 
+# NEED TO TRY THIS WITH SHA1 because I may not be able to use sha256 on the esp8266.
+
+
+
 # AWS Version 4 signing example
 # This version makes a GET request and passes request parameters
 # and authorization information in the query string
@@ -74,7 +78,7 @@ credential_scope = datestamp + '/' + region + '/' + service + '/' + 'aws4_reques
 # parameters are in the query string. Query string values must
 # be URL-encoded.
 
-canonical_querystring = 'Action=SendMessage&MessageBody=Howdy%20yall'
+canonical_querystring = 'Action=ReceiveMessage'
 canonical_querystring += '&Version=2012-11-05'
 canonical_querystring += '&X-Amz-Algorithm=AWS4-HMAC-SHA256'
 canonical_querystring += '&X-Amz-Credential=' + urllib.quote_plus(access_key + '/' + credential_scope)
@@ -88,7 +92,7 @@ payload_hash = hashlib.sha256('').hexdigest()
 
 # Step 6: Combine elements to create canonical request
 canonical_request = method + '\n' + '/141291046059/sleepyQueue' + '\n' + canonical_querystring + '\n' + canonical_headers + '\n' + signed_headers + '\n' + payload_hash
-print("canonical_request:  " + canonical_request)
+print("canonical_request:\n" + canonical_request)
 
 # ************* TASK 2: CREATE THE STRING TO SIGN*************
 string_to_sign = algorithm + '\n' +  amz_date + '\n' +  credential_scope + '\n' +  hashlib.sha256(canonical_request).hexdigest()
