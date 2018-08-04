@@ -21,26 +21,25 @@ https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Receiv
  */
 
 #include "sleepy.h"
-#include <ESP8266HTTPClient.h>
 
 void setup() { 
-  extern String TIME_API_KEY;
-  Serial.begin(115200);
-  delay(100);
+    extern String TIME_API_KEY;
+    Serial.begin(115200);
+    delay(100);
 
-  // Connect to WiFi
-  Serial.print("\nConnecting to ");
-  Serial.print(ssid);
-  
-  WiFi.begin(ssid, password);
-  
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(200);
-    Serial.print(".");
-  }
+    // Connect to WiFi
+    Serial.print("\nConnecting to ");
+    Serial.print(ssid);
 
-  t = get_time_from_api();
-  Serial.println("The time is: " + String(t));
+    WiFi.begin(ssid, password);
+
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(200);
+        Serial.print(".");
+    }
+
+    t = get_time_from_api();
+    Serial.println("The time is: " + String(t));
 
 }
 
