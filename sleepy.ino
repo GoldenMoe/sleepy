@@ -3,22 +3,7 @@
 * https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-long-polling.html
 https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_ReceiveMessage.html and ctrl f long polling for sample req
 *
-* Simple HTTP get webclient test
-* This is taken from the sample on the ADAFRUIT website. Going to modify to work for me. 
 */
-
-//TODO NEXT:
-//Write a function that syncs up the time with a server
-// Only need to call the function every few days. 
-// Can use the timeLib to set it up so its called at this interval.
-// Having a function to do this will also save memory and compute power.
-
-/*
- setSyncProvider(getTimeFunction);// Set the external time
- // provider
- setSyncInterval(interval); // Set the number of
- // seconds between re-syncs
- */
 
 #include "sleepy.h"
 
@@ -34,20 +19,20 @@ void setup() {
     WiFi.begin(ssid, password);
 
     while (WiFi.status() != WL_CONNECTED) {
-        delay(200);
+        delay(300);
         Serial.print(".");
     }
 
-    t = get_time_from_api();
-    Serial.println("The time is: " + String(t));
-
+    // Set scheduler to call my api-time-getting function once a day
+    setSyncProvider(get_time_from_api);  
+    setSyncInterval(86400);
+    Serial.println("The time is " + String(now()));
 }
 
 
 void loop() {
 
   delay(5000);
-
   Serial.print("connecting to ");
   Serial.println(host);
   

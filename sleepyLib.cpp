@@ -1,5 +1,6 @@
 #include "Arduino.h"
 #include <ESP8266HTTPClient.h>
+#include <TimeLib.h>
 
 
 time_t get_time_from_api(void){
@@ -33,4 +34,14 @@ char* construct_aws_request(const char* key, const char* msg){
     //check for "<body>" inside response
     //purge queue (handle the 403 that happens within 60 secs of purges)
     return todo;
+}
+
+// %Y%m%dT%H%M%SZ - amz == true
+// %Y%m%d         - amz == false
+String format_time_for_request(time_t t, bool amz){
+    String timeString = String(year(t)) + String(month(t)) + String(day(t));
+    if (amz) {
+        timeString = timeString + "T" + String(hour(t)) + String(minute(t)) + String(second(t)) + "Z";
+    }
+    return timeString;
 }

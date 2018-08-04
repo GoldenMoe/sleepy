@@ -10,7 +10,6 @@
 #include <string.h>
 
 // GLOBALS
-time_t t;
 const short int httpPort = 80;
 
 String account_number = "141291046059";
@@ -25,5 +24,6 @@ String endpoint = "https://" + host + "/" + account_number + "/" + queueName;
 // Function Definitions
 char* construct_aws_request(const char* key, const char* msg);
 time_t get_time_from_api(void);
+String format_time_for_request(time_t t);
 
 #endif
