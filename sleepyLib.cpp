@@ -28,37 +28,20 @@ time_t get_time_from_api(void){
     }
 }
 
-char* construct_aws_request(const char* key, const char* msg){
-    //TODO
-    char* todo = "todo";
-    //receive message
-    //check for "<body>" inside response
-    //purge queue (handle the 403 that happens within 60 secs of purges)
-    return todo;
-}
-
-// %Y%m%dT%H%M%SZ - amz == true
-// %Y%m%d         - amz == false
-String format_time_for_request(time_t t, bool amz){
-    String timeString = String(year(t)) + String(month(t)) + String(day(t));
+// YYYYMMDD'T'HHMMSS'Z' - amz == true
+// YYYYMMDD             - amz == false
+void format_time_for_request(char* str, time_t t, bool amz){
+    sprintf(str, "%04d%02d%02d", year(t), month(t), day(t));
     if (amz) {
-        timeString = timeString + "T" + String(hour(t)) + String(minute(t)) + String(second(t)) + "Z";
+        sprintf(str, "%sT%02d%02d%02dZ", str, hour(t), minute(t), second(t));
     }
-    return timeString;
+    return;
 }
 
-
-uint8_t  hashityall(void){
-    uint8_t *hash;
-    Sha256.initHmac( (const uint8_t*)"hash key",8); // key, and length of key in bytes
-    Sha256.print("This is a message to hash");
-    hash = Sha256.resultHmac();
-    int i;
-    for (i=0; i<32; i++){
-        //does it change when I cast to signed or String?
-        Serial.print(hash[i], HEX);
-    }
-    Serial.println();
-    //Serial.println((char*)hash);
-    return 0;
+// Warning: modifies the contents of key
+void sign_hmac_sha256(uint8_t* key, size_t key_size, String msg) {
+    Sha256.initHmac( (const uint8_t*)key, key_size);
+    Sha256.print(msg.c_str());
+    memcpy(key, Sha256.resultHmac(), HASH_LENGTH);
+    return;
 }

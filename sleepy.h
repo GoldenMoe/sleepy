@@ -9,7 +9,6 @@
 #include <TimeLib.h> 
 #include <string.h>
 
-
 // GLOBALS
 const short int httpPort = 80;
 
@@ -23,9 +22,8 @@ String host = "sqs." + region + ".amazonaws.com";
 String endpoint = "https://" + host + "/" + account_number + "/" + queueName;
 
 // Function Definitions
-char* construct_aws_request(const char* key, const char* msg);
+void format_time_for_request(char* str, time_t t, bool amz);
 time_t get_time_from_api(void);
-String format_time_for_request(time_t t);
-int hashityall(void);
+void sign_hmac_sha256(uint8_t* key, size_t key_size, String msg);
 
 #endif
