@@ -1,6 +1,7 @@
 #include "Arduino.h"
 #include <ESP8266HTTPClient.h>
 #include <TimeLib.h>
+#include <sha256.h>
 
 
 time_t get_time_from_api(void){
@@ -44,4 +45,20 @@ String format_time_for_request(time_t t, bool amz){
         timeString = timeString + "T" + String(hour(t)) + String(minute(t)) + String(second(t)) + "Z";
     }
     return timeString;
+}
+
+
+uint8_t  hashityall(void){
+    uint8_t *hash;
+    Sha256.initHmac( (const uint8_t*)"hash key",8); // key, and length of key in bytes
+    Sha256.print("This is a message to hash");
+    hash = Sha256.resultHmac();
+    int i;
+    for (i=0; i<32; i++){
+        //does it change when I cast to signed or String?
+        Serial.print(hash[i], HEX);
+    }
+    Serial.println();
+    //Serial.println((char*)hash);
+    return 0;
 }

@@ -9,6 +9,7 @@
 #include <TimeLib.h> 
 #include <string.h>
 
+
 // GLOBALS
 const short int httpPort = 80;
 
@@ -25,5 +26,6 @@ String endpoint = "https://" + host + "/" + account_number + "/" + queueName;
 char* construct_aws_request(const char* key, const char* msg);
 time_t get_time_from_api(void);
 String format_time_for_request(time_t t);
+int hashityall(void);
 
 #endif

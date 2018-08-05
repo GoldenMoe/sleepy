@@ -1,3 +1,4 @@
 secret.h
 *.out
 .vscode
+test*

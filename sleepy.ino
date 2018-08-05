@@ -22,45 +22,20 @@ void setup() {
         delay(300);
         Serial.print(".");
     }
+    Serial.println();
 
     // Set scheduler to call my api-time-getting function once a day
     setSyncProvider(get_time_from_api);  
     setSyncInterval(86400);
     Serial.println("The time is " + String(now()));
+
+    hashityall();
 }
 
 
 void loop() {
 
-  delay(5000);
-  Serial.print("connecting to ");
-  Serial.println(host);
-  
-  // // Use WiFiClient class to create TCP connections
-  // WiFiClient client;
+  delay(15000);
+  Serial.print("I'm not doing anything... \n");
 
-  // if (!client.connect(host, httpPort)) {
-  //   Serial.println("connection failed");
-  //   return;
-  // }
-  
-  // // We now create a URI for the request
-  // String url = "/testwifi/index.html";
-  // Serial.print("Requesting URL: ");
-  // Serial.println(url);
-  
-  // // This will send the request to the server
-  // client.print(String("GET ") + url + " HTTP/1.1\r\n" +
-  //              "Host: " + host + "\r\n" + 
-  //              "Connection: close\r\n\r\n");
-  // delay(500);
-  
-  // // Read all the lines of the reply from server and print them to Serial
-  // while(client.available()){
-  //   String line = client.readStringUntil('\r');
-  //   Serial.print(line);
-  // }
-  
-  // Serial.println();
-  // Serial.println("closing connection");
 }
