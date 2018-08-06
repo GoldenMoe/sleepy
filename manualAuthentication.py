@@ -7,9 +7,6 @@ It receives a message from a queue on SQS.
 The reason I wrote it is so I can understand the process of manually
 authenticating against AWS, so I can do it in the Arduino code.  
 """
-
-# NEED TO TRY THIS WITH SHA1 because I may not be able to use sha256 on the esp8266.
-
 import sys, os, base64, datetime, hashlib, hmac, urllib, requests
 
 # ************* REQUEST VALUES *************

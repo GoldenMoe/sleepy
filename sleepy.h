@@ -19,7 +19,7 @@ String service = "sqs";
 String method = "GET";
 String region = "ap-southeast-2";
 String host = "sqs." + region + ".amazonaws.com";
-String endpoint = "https://" + host + "/" + account_number + "/" + queueName;
+String endpoint = "http://" + host + "/" + account_number + "/" + queueName;
 
 // Function Definitions
 void format_time_for_request(char* str, time_t t, bool amz);

@@ -6,7 +6,7 @@
 
 time_t get_time_from_api(void){
     extern String TIME_API_KEY;
-    String url = "http://api.timezonedb.com/v2/get-time-zone?key=" + TIME_API_KEY + "&format=json&by=zone&zone=Australia/Sydney";
+    String url = "http://api.timezonedb.com/v2/get-time-zone?key=" + TIME_API_KEY + "&format=json&by=zone&zone=UTC";
 
     HTTPClient http;
     http.begin(url.c_str());
