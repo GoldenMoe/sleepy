@@ -41,7 +41,7 @@ void loop() {
     String canonical_headers = "host:" + host + '\n';
     String credential_scope = String(datestamp) + '/' + region + '/' + service + '/' + "aws4_request";
     String  amz_credential = String(AWS_ACCESS_KEY_ID) + '/' + credential_scope;
-            amz_credential.replace("/", "%2f"); // url encode
+            amz_credential.replace("/", "%2F"); // url encode
 
     
     String canonical_querystring = "Action=ReceiveMessage";
@@ -67,8 +67,6 @@ void loop() {
     for (i = 0; i < HASH_LENGTH; i++){
         sprintf(hexdigest + sizeof(hexdigest[0])*2*i, "%02x", hash_of_canonical_request[i]);
     }
-    Serial.println("\n\ncanonical request: \n" +  canonical_request);
-    Serial.println("\n\nhash of canonical_request: \n" + String(hexdigest));
     
     //this hexdigest is currently discrepant with the one aws returns
     String string_to_sign = String(algorithm) + '\n' +  String(amz_date) + '\n' +  credential_scope + '\n' +  String(hexdigest); 
@@ -89,20 +87,16 @@ void loop() {
     for (i = 0; i < HASH_LENGTH; i++){
         sprintf(hexdigest + sizeof(hexdigest[0])*2*i, "%02x", signing_key[i]);
     }
-//untested from here
+
     canonical_querystring += "&X-Amz-Signature=" + String(hexdigest);
     String request_url = endpoint + '?' + canonical_querystring;
-
-
+    
     HTTPClient http;
     http.begin(request_url.c_str());
     int httpCode = http.GET();
-
-
     String payload = http.getString(); // response body
     http.end();
-    Serial.println("canonical querystring: \n" + canonical_request);
-    Serial.println("string to sign: \n" + string_to_sign);
+
     Serial.println(String(httpCode));
     Serial.println(payload);
 
