@@ -17,7 +17,7 @@ String queueName = "sleepyQueue";
 String service = "sqs";
 
 String method = "GET";
-String region = "ap-southeast-2";
+String region = "us-east-1";
 String host = "sqs." + region + ".amazonaws.com";
 String endpoint = "http://" + host + "/" + account_number + "/" + queueName;
 
