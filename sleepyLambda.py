@@ -3,7 +3,7 @@ import boto3
 def lambda_handler(event, context):
     
     client = boto3.client('sqs')
-    response = client.send_message(
+    client.send_message(
         QueueUrl='https://sqs.us-east-1.amazonaws.com/141291046059/sleepyQueue',
         MessageBody='Howdy from Lambda',
         DelaySeconds=0,
