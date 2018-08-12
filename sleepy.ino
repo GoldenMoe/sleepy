@@ -30,6 +30,8 @@ void setup() {
 
 
 void loop() {
+    static bool light_is_on = false;
+
     time_t t = now();
     char amz_date[17];
     char datestamp[9];
@@ -72,11 +74,12 @@ void loop() {
     String string_to_sign = String(algorithm) + '\n' +  String(amz_date) + '\n' +  credential_scope + '\n' +  String(hexdigest); 
 
     char initial_key[45] = "AWS4";
-    uint8_t signing_key[HASH_LENGTH];
     strcat(initial_key, AWS_SECRET_ACCESS_KEY);
-    
     Sha256.initHmac( (const uint8_t*)initial_key, strlen(initial_key));
     Sha256.print(datestamp);
+
+    uint8_t signing_key[HASH_LENGTH];
+    // copy hmac result from initial key to signing_key
     memcpy(signing_key, Sha256.resultHmac(), HASH_LENGTH);
     // signing_key modified by reference upon each call
     sign_hmac_sha256(signing_key, HASH_LENGTH, region);
@@ -99,6 +102,14 @@ void loop() {
 
     Serial.println(String(httpCode));
     Serial.println(payload);
+
+    if (payload.indexOf("<Message>", 0) != -1){
+        Serial.println("Switching light...");
+        light_is_on = !light_is_on;
+        // todo connect opto triac and actually switch it.
+    }
+    Serial.println("Light is on? - " + String(light_is_on));
+
 
     delay(30000);
 }
